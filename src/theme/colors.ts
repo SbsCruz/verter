@@ -1,4 +1,4 @@
-// Tokens from the Claude Design spec sheet (Verter v1).
+// Color tokens from the Claude Design spec sheet (Verter v1).
 export const palette = {
   light: {
     bg: '#F4F6FA',
@@ -44,36 +44,8 @@ export const palette = {
 
 export type Colors = typeof palette.light;
 
-export const brand = { from: '#1F6FEB', to: '#1550C0' };
+// Same in both schemes: the result card gradient and text on top of it.
+export const brand = { from: '#1F6FEB', to: '#1550C0', onBrand: '#FFFFFF' };
 
-export const font = {
-  medium: 'Manrope_500Medium',
-  semibold: 'Manrope_600SemiBold',
-  bold: 'Manrope_700Bold',
-  extrabold: 'Manrope_800ExtraBold',
-};
-
-// Shadows only apply in light mode; dark mode uses 1pt outlines instead.
-export const shadow = {
-  card: {
-    shadowColor: '#101828',
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 2,
-  },
-  result: {
-    shadowColor: '#1F6FEB',
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 6,
-  },
-  swap: {
-    shadowColor: '#101828',
-    shadowOpacity: 0.14,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 4,
-  },
-};
+// Warning triangle fill and glyph.
+export const warnIcon = { fill: '#FCC419', glyph: '#3A2600' };
