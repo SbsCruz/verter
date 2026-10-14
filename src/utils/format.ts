@@ -1,10 +1,7 @@
-export type Currency = 'COP' | 'USD';
-
-export const MAX_COP_DIGITS = 10;
-const MAX_USD_DIGITS = 7;
+import { Currency, MAX_COP_DIGITS, MAX_USD_DIGITS } from '@/constants/currencies';
 
 // Inserts a grouping separator every three digits: "45000" -> "45.000".
-function group(digits: string, sep: string): string {
+export function group(digits: string, sep: string): string {
   return digits.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
 }
 
@@ -34,13 +31,11 @@ export function toNumber(raw: string): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-// Formats a computed amount for the result line.
-export function formatAmount(value: number, currency: Currency): string {
-  if (currency === 'COP') {
-    return `$${group(String(Math.round(value)), '.')}`;
-  }
+// Formats a computed amount without the "$": 45000 -> "45.000", 14.07 -> "14.07".
+export function formatNumber(value: number, currency: Currency): string {
+  if (currency === 'COP') return group(String(Math.round(value)), '.');
   const [int, dec] = value.toFixed(2).split('.');
-  return `$${group(int, ',')}.${dec}`;
+  return `${group(int, ',')}.${dec}`;
 }
 
 // Raw value (as sanitize would produce) for a computed amount, used when swapping.
