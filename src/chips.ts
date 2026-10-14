@@ -33,5 +33,5 @@ const preset = (value: number): Chip => ({
 
 export const CHIPS: Record<Currency, Chip[]> = {
   COP: [multiplier(100, '×100'), multiplier(1_000, '×1k'), multiplier(10_000, '×10k'), multiplier(100_000, '×100k')],
-  USD: [preset(5), preset(10), preset(20), preset(50)],
+  USD: [preset(10), preset(20), preset(50), preset(100)],
 };
