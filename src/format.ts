@@ -1,5 +1,8 @@
 export type Currency = 'COP' | 'USD';
 
+export const MAX_COP_DIGITS = 10;
+const MAX_USD_DIGITS = 7;
+
 // Inserts a grouping separator every three digits: "45000" -> "45.000".
 function group(digits: string, sep: string): string {
   return digits.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
@@ -9,11 +12,11 @@ function group(digits: string, sep: string): string {
 // COP: whole pesos only ("45.000" -> "45000"). USD: digits plus up to 2 decimals.
 export function sanitize(text: string, currency: Currency): string {
   if (currency === 'COP') {
-    return text.replace(/\D/g, '').replace(/^0+(?=\d)/, '').slice(0, 12);
+    return text.replace(/\D/g, '').replace(/^0+/, '').slice(0, MAX_COP_DIGITS);
   }
   const cleaned = text.replace(/[^\d.]/g, '');
   const [int = '', ...rest] = cleaned.split('.');
-  const intPart = int.replace(/^0+(?=\d)/, '').slice(0, 9);
+  const intPart = int.replace(/^0+(?=\d)/, '').slice(0, MAX_USD_DIGITS);
   if (rest.length === 0) return intPart;
   return `${intPart || '0'}.${rest.join('').slice(0, 2)}`;
 }
