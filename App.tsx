@@ -25,7 +25,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { CHIPS, Chip } from './src/chips';
 import { Currency, formatAmount, formatInput, sanitize, toNumber, toRaw } from './src/format';
-import { ClearIcon, SwapIcon, WarnIcon } from './src/icons';
+import { ClearIcon, ClearLargeIcon, SwapIcon, WarnIcon } from './src/icons';
 import { brand, Colors, font, palette, shadow } from './src/theme';
 import { useRate } from './src/useRate';
 
@@ -71,6 +71,11 @@ function Converter() {
   const resetChips = () => {
     setBase(null);
     setActiveChip(null);
+  };
+
+  const clearAmount = () => {
+    setRaw('');
+    resetChips();
   };
 
   const onType = (text: string) => {
@@ -163,10 +168,7 @@ function Converter() {
             />
             {raw !== '' && (
               <Pressable
-                onPress={() => {
-                  setRaw('');
-                  resetChips();
-                }}
+                onPress={clearAmount}
                 style={s.clearHit}
                 accessibilityRole="button"
                 accessibilityLabel="Clear amount"
@@ -180,24 +182,36 @@ function Converter() {
         </Pressable>
 
         <View style={s.swapSlot}>
-          <Pressable
-            onPress={swap}
-            style={({ pressed }) => [s.swapRing, pressed && { transform: [{ scale: 0.94 }] }]}
-            accessibilityRole="button"
-            accessibilityLabel={`Swap currencies. Now converting ${from} to ${to}`}
-          >
-            <View style={s.swap}>
-              <Animated.View
-                style={{
-                  transform: [
-                    { rotate: spin.interpolate({ inputRange: [0, 360], outputRange: ['0deg', '360deg'] }) },
-                  ],
-                }}
-              >
-                <SwapIcon color={c.brandInk} />
-              </Animated.View>
-            </View>
-          </Pressable>
+          <View style={s.actions}>
+            <Pressable
+              onPress={swap}
+              style={({ pressed }) => [s.actionRing, pressed && s.actionPressed]}
+              accessibilityRole="button"
+              accessibilityLabel={`Swap currencies. Now converting ${from} to ${to}`}
+            >
+              <View style={s.action}>
+                <Animated.View
+                  style={{
+                    transform: [
+                      { rotate: spin.interpolate({ inputRange: [0, 360], outputRange: ['0deg', '360deg'] }) },
+                    ],
+                  }}
+                >
+                  <SwapIcon color={c.brandInk} />
+                </Animated.View>
+              </View>
+            </Pressable>
+            <Pressable
+              onPress={clearAmount}
+              style={({ pressed }) => [s.actionRing, pressed && s.actionPressed]}
+              accessibilityRole="button"
+              accessibilityLabel="Clear amount"
+            >
+              <View style={s.action}>
+                <ClearLargeIcon color={c.redInk} />
+              </View>
+            </Pressable>
+          </View>
         </View>
 
         <LinearGradient
@@ -278,7 +292,6 @@ function CurrencyLabel({
     <View style={s.labelRow}>
       <Text style={s.flag}>{CURRENCIES[currency].flag}</Text>
       <Text style={[s.code, onBrand && s.onBrand]}>{currency}</Text>
-      <Text style={[s.name, onBrand && s.onBrand]}>{CURRENCIES[currency].name}</Text>
     </View>
   );
 }
@@ -338,7 +351,6 @@ const makeStyles = (c: Colors, dark: boolean) =>
     labelRow: { flexDirection: 'row', alignItems: 'center', gap: 8, height: 20 },
     flag: { fontSize: 18, lineHeight: 20 },
     code: { fontFamily: font.extrabold, fontSize: 15, lineHeight: 20, letterSpacing: 0.3, color: c.ink },
-    name: { fontFamily: font.medium, fontSize: 15, lineHeight: 20, color: c.ink2 },
     onBrand: { color: '#FFFFFF' },
 
     amountRow: { flexDirection: 'row', alignItems: 'center', height: 52, marginTop: 6, gap: 6 },
@@ -363,9 +375,9 @@ const makeStyles = (c: Colors, dark: boolean) =>
     },
 
     swapSlot: { height: 8, zIndex: 2, alignItems: 'center' },
-    swapRing: {
-      position: 'absolute',
-      top: -26,
+    actions: { position: 'absolute', top: -26, flexDirection: 'row', gap: 28 },
+    actionPressed: { transform: [{ scale: 0.94 }] },
+    actionRing: {
       width: 60,
       height: 60,
       borderRadius: 30,
@@ -374,7 +386,7 @@ const makeStyles = (c: Colors, dark: boolean) =>
       backgroundColor: c.bg,
       ...(dark ? {} : shadow.swap),
     },
-    swap: {
+    action: {
       flex: 1,
       borderRadius: 26,
       backgroundColor: c.swapBg,
