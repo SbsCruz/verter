@@ -25,6 +25,12 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2a31b007-1f2a-473b-a8b7-e7334b662c33"
+      }
+    },
+    "owner": "sbs.cruz"
   }
 }
