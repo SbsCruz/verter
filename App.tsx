@@ -384,7 +384,7 @@ const makeStyles = (c: Colors, dark: boolean) =>
       borderWidth: 4,
       borderColor: c.bg,
       backgroundColor: c.bg,
-      ...(dark ? {} : shadow.swap),
+      ...(dark ? {} : shadow.button),
     },
     action: {
       flex: 1,
